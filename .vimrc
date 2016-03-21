@@ -4,22 +4,6 @@ set nocompatible " This setting prevents vim from emulating the original vi's bu
 " add utf-8 support
 set fileencodings=utf-8,latin2
 
-if !has('gui_running')
-    " Compatibility for Terminal
-    let g:solarized_termtrans=1
-
-    if (&t_Co >= 256 || $TERM == 'xterm-256color')
-        " Do nothing, it handles itself.
-    else
-        " Make Solarized use 16 colors for Terminal support
-        let g:solarized_termcolors=16
-    endif
-endif
-
-syntax enable
-set background=dark
-colorscheme solarized
-
 
 
 set bs=2    " allow backspacing over everything in insert mode
@@ -183,10 +167,18 @@ endif " has("autocmd")
 
 
 
-au BufNewFile,BufRead *.php,*.php3,*.inc,*.module,*.info,*.install set ft=php
-au BufNewFile,BufRead *.nqc,*.cpp,*.c,*.as                         set ft=cpp
-au BufNewFile,BufRead *.cgi,*.plx,*.pl                             set ft=perl
-au BufNewFile,BufRead *.scss                                       set ft=scss
+" PHP
+au BufNewFile,BufRead *.php,*.php3 set ft=php
+au BufRead,BufNewFile *.module     set filetype=php
+au BufRead,BufNewFile *.install    set filetype=php
+au BufRead,BufNewFile *.test       set filetype=php
+au BufRead,BufNewFile *.inc        set filetype=php
+au BufRead,BufNewFile *.profile    set filetype=php
+au BufRead,BufNewFile *.view       set filetype=php
+
+au BufNewFile,BufRead *.nqc,*.cpp,*.c,*.as set ft=cpp
+au BufNewFile,BufRead *.cgi,*.plx,*.pl     set ft=perl
+au BufNewFile,BufRead *.scss               set ft=scss
 
 
 
@@ -216,6 +208,8 @@ set rtp+=~/.vim/bundle/vundle/
 " required! 
 Bundle 'gmarik/vundle'
 
+Bundle 'altercation/vim-colors-solarized'
+
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'tpope/vim-surround'
 
@@ -224,15 +218,23 @@ Bundle 'mattn/webapi-vim'
 Bundle 'mattn/gist-vim'
   let g:gist_clip_command = 'pbcopy'
   let g:gist_show_privates = 1
+  let g:gist_post_private = 1
 
 Bundle 'mutewinter/vim-css3-syntax'
 Bundle 'pangloss/vim-javascript'
 Bundle 'leshill/vim-json'
 Bundle 'nono/vim-handlebars'
 " Bundle 'othree/html5.vim'
+" Bundle 'jimmyhchan/dustjs.vim'
+
+Bundle 'mustache/vim-mustache-handlebars'
+  let g:mustache_abbreviations = 1
 
 " Includes scss/sass
 Bundle 'tpope/vim-haml'
+
+" Includes stylus
+"Bundle 'wavded/vim-stylus'
 
 " Snipmate with dependancies
 " Snippets are here : https://github.com/honza/vim-snippets
@@ -240,6 +242,7 @@ Bundle "MarcWeber/vim-addon-mw-utils"
 Bundle "tomtom/tlib_vim"
 Bundle "honza/vim-snippets"
 Bundle "garbas/vim-snipmate"
+Bundle "terryma/vim-multiple-cursors"
 
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
@@ -250,3 +253,31 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'kien/ctrlp.vim'
   set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " Linux/MacOSX
   let g:ctrlp_map = '<c-f>'
+
+
+" Reset mapping for multiple cursors
+let g:multi_cursor_use_default_mapping=0 " disable defaults
+let g:multi_cursor_next_key='<C-m>'
+"let g:multi_cursor_prev_key='<C-p>'
+"let g:multi_cursor_skip_key='<C-x>'
+let g:multi_cursor_quit_key='<Esc>'
+
+
+if !has('gui_running')
+    " Compatibility for Terminal
+    let g:solarized_termtrans=1
+
+    if (&t_Co >= 256 || $TERM == 'xterm-256color')
+        " Do nothing, it handles itself.
+    else
+        " Make Solarized use 16 colors for Terminal support
+        let g:solarized_termcolors=16
+    endif
+endif
+
+syntax enable
+set background=dark
+colorscheme solarized
+
+" set the tab hightlight background (ctermbg) to transparent or None
+hi SpecialKey cterm=None ctermfg=0 ctermbg=None guifg=Cyan
